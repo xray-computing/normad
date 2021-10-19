@@ -1,5 +1,5 @@
 /*!
- * normad v1.0.0
+ * normad v1.0.1
  * Normalisation d'Adresse à partir des Open Data Gouvernementales
  * 
  * ISC License
@@ -34,8 +34,15 @@ document.addEventListener("DOMContentLoaded", function () {
                             console.log('Normad: Bad Response ("features" is missing)');
                             return false;
                         }
-                        var bootstrap = (typeof popover === "function");
-                        
+                        // Is Bootstrap loaded ?
+                        var isBootstrap = false;
+                        var scriptList = document.querySelectorAll('script');
+                        for(var i = 0; i < scriptList.length; i++) {
+                            if (scriptList[i].src.indexOf('bootstrap') > 0) {
+                                isBootstrap = true;
+                                break;
+                            }
+                        }
                         var addresses = [];
                         var indexes = [];
                         // Deduplicate datas
@@ -63,6 +70,9 @@ document.addEventListener("DOMContentLoaded", function () {
                                 let md = document.createElement('div');
                                 md.className = 'modal-dialog';
                                 md.setAttribute('role', 'document');
+                                
+                                let mc = document.createElement('div');
+                                mc.className = 'modal-content';
                                 // Header
                                 let mh = document.createElement('div');
                                 mh.className = 'modal-header';
@@ -70,19 +80,19 @@ document.addEventListener("DOMContentLoaded", function () {
                                 let mt = document.createElement('h5');
                                 mt.className = 'modal-title';
                                 
-                                let mc = document.createElement('button');
-                                mc.className = 'close';
-                                mc.setAttribute('type', 'button');
-                                mc.setAttribute('data-dismiss', 'modal');
-                                mc.setAttribute('aria-label', 'Fermer');
+                                let mx = document.createElement('button');
+                                mx.className = 'close';
+                                mx.setAttribute('type', 'button');
+                                mx.setAttribute('data-dismiss', 'modal');
+                                mx.setAttribute('aria-label', 'Fermer');
                                 
                                 let icon = document.createElement('span');
                                 icon.setAttribute('aria-hidden', 'true');
                                 icon.innerHTML = '&times;'     
       
-                                mc.appendChild(icon);
+                                mx.appendChild(icon);
                                 mh.appendChild(mt);
-                                mh.appendChild(mc);
+                                mh.appendChild(mx);
                                 // Body
                                 let mb = document.createElement('div');
                                 mb.className = 'modal-body';
@@ -104,13 +114,16 @@ document.addEventListener("DOMContentLoaded", function () {
                                 mf.appendChild(ba);
                                 mf.appendChild(bc);
                                 
-                                md.appendChild(mh);
-                                md.appendChild(mb);
-                                md.appendChild(mf);
-                                
+                                mc.appendChild(mh);
+                                mc.appendChild(mb);
+                                mc.appendChild(mf);
+                                md.appendChild(mc);
                                 m.appendChild(md);
                                 
-                                modale = m;
+                                // Add Modal to DOM
+                                document.body.appendChild(m);
+                                
+                                modale = document.getElementById('normadModal');
                                 var body = mb;
                             } else {
                                 var body = modale.querySelector('.modal-body');
@@ -126,24 +139,21 @@ document.addEventListener("DOMContentLoaded", function () {
                                     text = addresses[i].address + ', ' + text;
                                 }
                                 
-                                // input-group-addon pour compatibilité anciennes versions Bootstrap
+                                // Input-Group Bootstrap 5
                                 let ig = document.createElement('div');
                                 ig.className = "input-group mb-1";
-                                if (bootstrap) {
-                                    let igp = document.createElement('div');
-                                    igp.className = "input-group-prepend input-group-addon";
 
-                                    let igt = document.createElement('div');
-                                    igt.className = "input-group-text";
-                                }
                                 let ip = document.createElement('input');
+                                ip.className = "form-check-input mt-0";
                                 ip.setAttribute('type', 'radio');
                                 ip.setAttribute('id', 'normAddr-' + i);
                                 ip.setAttribute('name', 'normadChoice');
                                 ip.dataset.id = i;
-                                if (bootstrap) {
-                                    igt.appendChild(ip);
-                                    igp.appendChild(igt);
+                                if (isBootstrap) {
+                                    let igp = document.createElement('div');
+                                    igp.className = "input-group-text";
+                                    
+                                    igp.appendChild(ip);
                                     ig.appendChild(igp);
                                 } else {
                                     ig.appendChild(ip);
@@ -158,13 +168,10 @@ document.addEventListener("DOMContentLoaded", function () {
                                 body.appendChild(ig);
                             }
                             // Modale Bootstrap
-                            if (bootstrap) {
-                                modale.modal('show');
+                            if (isBootstrap) {
+                                var my = new bootstrap.Modal(modale);
+                                my.show();
                             } else {
-                                if (creation) {
-                                    // Add Modal to DOM
-                                    document.body.appendChild(modale);
-                                }
                                 // Display Modal
                                 modale.style.display = 'block';
                                 // Close Event Handler
@@ -186,8 +193,8 @@ document.addEventListener("DOMContentLoaded", function () {
                                     addPostCode.value = addresses[checked[0].dataset.id].postcode;
                                     addLocality.value = addresses[checked[0].dataset.id].city;
                                 }
-                                if (bootstrap) {
-                                    modale.modal('hide');
+                                if (isBootstrap) {
+                                    my.hide();
                                 } else {
                                     modale.style.display = "none";
                                 }

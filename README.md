@@ -53,3 +53,5 @@ Le module permet de gérer plusieurs formulaires sur une même page ; il suffit 
 * Feuille de style personnalisée
 * and so on...
 ### 1.0.0 (Octobre 2021)
+* Native JS
+* Compatibilité Bootstrap 5.x (Modale + Input-Group)
