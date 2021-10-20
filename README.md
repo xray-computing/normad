@@ -1,5 +1,8 @@
 # Normad
 
+## Installation
+`npm install normad`
+
 ## Présentation
 Ce module permet de normaliser une adresse postal française. 
 Si plusieurs choix sont possibles, une modale s'ouvrira pour permettre à l'utilisateur de choisir la meilleure occurrence.
@@ -52,6 +55,7 @@ Le module permet de gérer plusieurs formulaires sur une même page ; il suffit 
 * Configuration de la modale, du titre, etc.
 * Feuille de style personnalisée
 * and so on...
+### 1.1.1 (Octobre 2021)
+* Compatibilité Bootstrap 5.x (Modale + Input-Group)
 ### 1.0.0 (Octobre 2021)
 * Native JS
-* Compatibilité Bootstrap 5.x (Modale + Input-Group)

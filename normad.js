@@ -1,5 +1,5 @@
 /*!
- * normad v1.0.1
+ * normad v1.1.1
  * Normalisation d'Adresse à partir des Open Data Gouvernementales
  * 
  * ISC License
