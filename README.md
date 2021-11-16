@@ -55,6 +55,8 @@ Le module permet de gérer plusieurs formulaires sur une même page ; il suffit 
 * Configuration de la modale, du titre, etc.
 * Feuille de style personnalisée
 * and so on...
+### 1.2.0 (Novembre 2021)
+* Compatibilité Bootstrap 4.x + Event Handler
 ### 1.1.1 (Octobre 2021)
 * Compatibilité Bootstrap 5.x (Modale + Input-Group)
 ### 1.0.0 (Octobre 2021)

@@ -1,5 +1,5 @@
 /*!
- * normad v1.1.1
+ * normad v1.2.0
  * Normalisation d'Adresse à partir des Open Data Gouvernementales
  * 
  * ISC License
@@ -37,8 +37,9 @@ document.addEventListener("DOMContentLoaded", function () {
                         // Is Bootstrap loaded ?
                         var isBootstrap = false;
                         var scriptList = document.querySelectorAll('script');
-                        for(var i = 0; i < scriptList.length; i++) {
+                        for (var i = 0; i < scriptList.length; i++) {
                             if (scriptList[i].src.indexOf('bootstrap') > 0) {
+                                var version = bootstrap.Tooltip.VERSION;
                                 isBootstrap = true;
                                 break;
                             }
@@ -49,47 +50,47 @@ document.addEventListener("DOMContentLoaded", function () {
                         for (var i = 0; i < data.features.length; i++) {
                             let row = data.features[i];
                             if (indexes.indexOf(row.properties.id) < 0) {
-                                addresses.push({ id: row.properties.id, address: row.properties.name, postcode: row.properties.postcode, city: row.properties.city });
+                                addresses.push({id: row.properties.id, address: row.properties.name, postcode: row.properties.postcode, city: row.properties.city});
                                 indexes.push(row.properties.id);
                             }
                         }
-                        
+
                         if (addresses.length > 1) {
                             // Create Modal
                             var modale = document.getElementById('normadModal');
                             var creation = false;
-                            
-                            if (typeof(modale) == 'undefined' || modale == null) {
+
+                            if (typeof (modale) == 'undefined' || modale == null) {
                                 creation = true;
                                 let m = document.createElement('div');
                                 m.className = 'modal';
                                 m.setAttribute('tabindex', -1);
                                 m.setAttribute('role', 'dialog');
                                 m.setAttribute('id', 'normadModal');
-                                
+
                                 let md = document.createElement('div');
                                 md.className = 'modal-dialog';
                                 md.setAttribute('role', 'document');
-                                
+
                                 let mc = document.createElement('div');
                                 mc.className = 'modal-content';
                                 // Header
                                 let mh = document.createElement('div');
                                 mh.className = 'modal-header';
-                                
+
                                 let mt = document.createElement('h5');
                                 mt.className = 'modal-title';
-                                
+
                                 let mx = document.createElement('button');
                                 mx.className = 'close';
                                 mx.setAttribute('type', 'button');
                                 mx.setAttribute('data-dismiss', 'modal');
                                 mx.setAttribute('aria-label', 'Fermer');
-                                
+
                                 let icon = document.createElement('span');
                                 icon.setAttribute('aria-hidden', 'true');
-                                icon.innerHTML = '&times;'     
-      
+                                icon.innerHTML = '&times;'
+
                                 mx.appendChild(icon);
                                 mh.appendChild(mt);
                                 mh.appendChild(mx);
@@ -99,37 +100,37 @@ document.addEventListener("DOMContentLoaded", function () {
                                 // Footer
                                 let mf = document.createElement('div');
                                 mf.className = 'modal-footer';
-                                
+
                                 let ba = document.createElement('button');
                                 ba.className = 'btn btn-primary'
                                 ba.setAttribute('type', 'button');
                                 ba.innerHTML = 'Valider mon choix';
-                                
+
                                 let bc = document.createElement('button');
                                 bc.className = 'btn btn-secondary';
                                 bc.setAttribute('type', 'button');
                                 bc.innerHTML = 'Annuler';
                                 bc.setAttribute('data-dismiss', 'modal');
-                                
+
                                 mf.appendChild(ba);
                                 mf.appendChild(bc);
-                                
+
                                 mc.appendChild(mh);
                                 mc.appendChild(mb);
                                 mc.appendChild(mf);
                                 md.appendChild(mc);
                                 m.appendChild(md);
-                                
+
                                 // Add Modal to DOM
                                 document.body.appendChild(m);
-                                
+
                                 modale = document.getElementById('normadModal');
                                 var body = mb;
                             } else {
                                 var body = modale.querySelector('.modal-body');
                             }
                             // Reset Body
-                            while(body.firstChild && body.removeChild(body.firstChild));
+                            while (body.firstChild && body.removeChild(body.firstChild));
 
                             // Complete
                             modale.querySelector('.modal-title').innerHTML = 'Choisissez une adresse valide';
@@ -138,23 +139,32 @@ document.addEventListener("DOMContentLoaded", function () {
                                 if (!partial) {
                                     text = addresses[i].address + ', ' + text;
                                 }
-                                
-                                // Input-Group Bootstrap 5
+
+                                // Input-Group Bootstrap 4.5
                                 let ig = document.createElement('div');
                                 ig.className = "input-group mb-1";
 
                                 let ip = document.createElement('input');
-                                ip.className = "form-check-input mt-0";
+                                // ip.className = "form-check-input mt-0";
                                 ip.setAttribute('type', 'radio');
                                 ip.setAttribute('id', 'normAddr-' + i);
                                 ip.setAttribute('name', 'normadChoice');
                                 ip.dataset.id = i;
                                 if (isBootstrap) {
+                                    if (version.indexOf('5.') < 0) {
+                                        var igpp = document.createElement('div');
+                                        igpp.className = "input-group-prepend";
+                                    }
                                     let igp = document.createElement('div');
                                     igp.className = "input-group-text";
-                                    
+
                                     igp.appendChild(ip);
-                                    ig.appendChild(igp);
+                                    if (version.indexOf('5.') < 0) {
+                                        igpp.appendChild(igp);
+                                        ig.appendChild(igpp);
+                                    } else {
+                                        ig.appendChild(igp);
+                                    }
                                 } else {
                                     ig.appendChild(ip);
                                 }
@@ -162,9 +172,9 @@ document.addEventListener("DOMContentLoaded", function () {
                                 il.className = 'form-control';
                                 il.setAttribute('for', 'normAddr-' + i);
                                 il.innerHTML = text;
-                                
+
                                 ig.appendChild(il);
-                                
+
                                 body.appendChild(ig);
                             }
                             // Modale Bootstrap
@@ -182,7 +192,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                     modale.style.display = "none";
                                 });
                             }
-                            
+
                             // Select Event Handler
                             modale.querySelector('.btn-primary').addEventListener('click', (event) => {
                                 let checked = document.querySelectorAll('input[name="normadChoice"]:checked');
@@ -192,6 +202,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                     }
                                     addPostCode.value = addresses[checked[0].dataset.id].postcode;
                                     addLocality.value = addresses[checked[0].dataset.id].city;
+                                    addLocality.dispatchEvent(new Event('change'));
                                 }
                                 if (isBootstrap) {
                                     my.hide();
@@ -206,6 +217,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             }
                             addPostCode.value = addresses[0].postcode;
                             addLocality.value = addresses[0].city;
+                            addLocality.dispatchEvent(new Event('change'));
                         } else {
                             console.log('Normad: No Address Found');
                         }
