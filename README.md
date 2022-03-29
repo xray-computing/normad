@@ -48,13 +48,32 @@ Le module permet de gérer plusieurs formulaires sur une même page ; il suffit 
 </script>
 <script type="text/javascript" src="/path/to/normad.min.js"></script>
 ```
+## Personnalisation
+La personnalisation des boutons se fait par l'ajout du script :
+```
+<!-- Audit d'un formulaire -->
+<script type="text/javascript">
+    var normaButtons = {
+        cancel: {order: 1, label: 'Annuler'},
+        submit: {order: 2, label: 'Valider mon choix'}
+    };
+</script>
+```
+## Exemples
+* [Exemple avec Bootstrap](https://github.com/xray-computing/normad/demos/index-bootstrap.html)
+* [Exemple sans Bootstrap](https://github.com/xray-computing/normad/demos/index.html)
 
+Pour chaque bouton (cancel ou submit), on pourra définir l'ordre d'affichage et le texte affiché
 ## Versions
 ### In the future...
 * Gestion multilingue
 * Configuration de la modale, du titre, etc.
 * Feuille de style personnalisée
 * and so on...
+### 1.3.2 (Mars 2022)
+* Personnalisation des boutons
+### 1.2.1 (Février 2022)
+* Compatibilité Bootstrap 4.0.x
 ### 1.2.0 (Novembre 2021)
 * Compatibilité Bootstrap 4.x + Event Handler
 ### 1.1.1 (Octobre 2021)

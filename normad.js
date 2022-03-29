@@ -1,5 +1,5 @@
 /*!
- * normad v1.2.0
+ * normad v1.3.2
  * Normalisation d'Adresse à partir des Open Data Gouvernementales
  * 
  * ISC License
@@ -28,6 +28,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 var xhr = new XMLHttpRequest();
                 xhr.onload = function () {
+                    const fireChange = (element, eventType="change") => element && element.dispatchEvent(new Event(eventType, { "bubbles": true }));
+                    
                     if (xhr.status >= 200 && xhr.status < 300) {
                         var data = JSON.parse(xhr.response);
                         if (!data.hasOwnProperty('features')) {
@@ -39,7 +41,12 @@ document.addEventListener("DOMContentLoaded", function () {
                         var scriptList = document.querySelectorAll('script');
                         for (var i = 0; i < scriptList.length; i++) {
                             if (scriptList[i].src.indexOf('bootstrap') > 0) {
-                                var version = bootstrap.Tooltip.VERSION;
+                                if(window.bootstrap) {
+                                    var version = window.bootstrap.Tooltip.VERSION;
+                                } else {
+                                    var version = $.fn.tooltip.Constructor.VERSION;
+                                }
+                                
                                 isBootstrap = true;
                                 break;
                             }
@@ -112,8 +119,28 @@ document.addEventListener("DOMContentLoaded", function () {
                                 bc.innerHTML = 'Annuler';
                                 bc.setAttribute('data-dismiss', 'modal');
 
-                                mf.appendChild(ba);
-                                mf.appendChild(bc);
+                                // Default orders
+                                let orders = [ba, bc];
+                                // Customized labels and orders
+                                if (typeof normaButtons !== 'undefined') {
+                                    if (normaButtons.hasOwnProperty('cancel')) {
+                                        if (normaButtons.cancel.hasOwnProperty('label')) {
+                                            bc.innerHTML = normaButtons.cancel.label;
+                                        }
+                                        if (normaButtons.cancel.hasOwnProperty('order')) {
+                                            orders[parseInt(normaButtons.cancel.order)] = bc;
+                                        }
+                                    }
+                                    if (normaButtons.hasOwnProperty('submit')) {
+                                        if (normaButtons.submit.hasOwnProperty('order')) {
+                                            ba.order = normaButtons.submit.order;
+                                        }
+                                        if (normaButtons.cancel.hasOwnProperty('order')) {
+                                            orders[parseInt(normaButtons.submit.order)] = ba;
+                                        }
+                                    }
+                                }
+                                orders.forEach(element => mf.appendChild(element));
 
                                 mc.appendChild(mh);
                                 mc.appendChild(mb);
@@ -142,7 +169,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                                 // Input-Group Bootstrap 4.5
                                 let ig = document.createElement('div');
-                                ig.className = "input-group mb-1";
+                                ig.className = "input-group mb-1 m-b-1";
 
                                 let ip = document.createElement('input');
                                 // ip.className = "form-check-input mt-0";
@@ -153,7 +180,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 if (isBootstrap) {
                                     if (version.indexOf('5.') < 0) {
                                         var igpp = document.createElement('div');
-                                        igpp.className = "input-group-prepend";
+                                        igpp.className = "input-group-prepend input-group-addon";
                                     }
                                     let igp = document.createElement('div');
                                     igp.className = "input-group-text";
@@ -179,8 +206,13 @@ document.addEventListener("DOMContentLoaded", function () {
                             }
                             // Modale Bootstrap
                             if (isBootstrap) {
-                                var my = new bootstrap.Modal(modale);
-                                my.show();
+                                if (version.indexOf('4.0') == 0) {
+                                    // Bootstrap needs JQuery, so...
+                                    jQuery('#normadModal').modal('show');
+                                } else {
+                                    var my = new window.bootstrap.Modal(modale);
+                                    my.show();
+                                }
                             } else {
                                 // Display Modal
                                 modale.style.display = 'block';
@@ -202,10 +234,16 @@ document.addEventListener("DOMContentLoaded", function () {
                                     }
                                     addPostCode.value = addresses[checked[0].dataset.id].postcode;
                                     addLocality.value = addresses[checked[0].dataset.id].city;
-                                    addLocality.dispatchEvent(new Event('change'));
+                                    
+                                    fireChange(addLocality);
                                 }
                                 if (isBootstrap) {
-                                    my.hide();
+                                    if (version.indexOf('4.0') == 0) {
+                                        // Bootstrap needs JQuery, so...
+                                        jQuery('#normadModal').modal('hide');
+                                    } else {
+                                        my.hide();
+                                    }
                                 } else {
                                     modale.style.display = "none";
                                 }
@@ -217,7 +255,8 @@ document.addEventListener("DOMContentLoaded", function () {
                             }
                             addPostCode.value = addresses[0].postcode;
                             addLocality.value = addresses[0].city;
-                            addLocality.dispatchEvent(new Event('change'));
+                            
+                            fireChange(addLocality);
                         } else {
                             console.log('Normad: No Address Found');
                         }
