@@ -60,8 +60,8 @@ La personnalisation des boutons se fait par l'ajout du script :
 </script>
 ```
 ## Exemples
-* [Exemple avec Bootstrap](https://github.com/xray-computing/normad/demos/index-bootstrap.html)
-* [Exemple sans Bootstrap](https://github.com/xray-computing/normad/demos/index.html)
+* [Exemple avec Bootstrap](demos/index-bootstrap.html)
+* [Exemple sans Bootstrap](demos/index.html)
 
 Pour chaque bouton (cancel ou submit), on pourra définir l'ordre d'affichage et le texte affiché
 ## Versions
@@ -70,6 +70,8 @@ Pour chaque bouton (cancel ou submit), on pourra définir l'ordre d'affichage et
 * Configuration de la modale, du titre, etc.
 * Feuille de style personnalisée
 * and so on...
+### 1.3.3 (Avril 2022)
+* Compatibilité Bootstrap < 4.x (nécessite JQuery pour la modale)
 ### 1.3.2 (Mars 2022)
 * Personnalisation des boutons
 ### 1.2.1 (Février 2022)

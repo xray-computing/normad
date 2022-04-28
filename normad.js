@@ -206,7 +206,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             }
                             // Modale Bootstrap
                             if (isBootstrap) {
-                                if (version.indexOf('4.0') == 0) {
+                                if (version.indexOf('5.') < 0) {
                                     // Bootstrap needs JQuery, so...
                                     jQuery('#normadModal').modal('show');
                                 } else {
@@ -238,7 +238,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                     fireChange(addLocality);
                                 }
                                 if (isBootstrap) {
-                                    if (version.indexOf('4.0') == 0) {
+                                    if (version.indexOf('5.') < 0) {
                                         // Bootstrap needs JQuery, so...
                                         jQuery('#normadModal').modal('hide');
                                     } else {
