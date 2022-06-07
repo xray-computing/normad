@@ -59,6 +59,19 @@ La personnalisation des boutons se fait par l'ajout du script :
     };
 </script>
 ```
+## Capture d'évènement
+Vous pouvez dans un script externe capturer le fait que la mise à jour ait été effectuée par Normad :
+```
+<script type="text/javascript">
+    document.getElementById('<Locality Input Id>').addEventListener('change', e => {
+        if (Normad.normalized === true) {
+            // Address was normalized
+        } else if (Normad.error !== null) {
+            // Erreur rencontrée à la normalisation
+        }
+    });
+</script>
+```
 ## Exemples
 * [Exemple avec Bootstrap](demos/index-bootstrap.html)
 * [Exemple sans Bootstrap](demos/index.html)
@@ -70,6 +83,8 @@ Pour chaque bouton (cancel ou submit), on pourra définir l'ordre d'affichage et
 * Configuration de la modale, du titre, etc.
 * Feuille de style personnalisée
 * and so on...
+### 1.4.0 (Juin 2022)
+* Flag Normad.normalized indique si l'adresse a été normalisée ou non
 ### 1.3.3 (Avril 2022)
 * Compatibilité Bootstrap < 4.x (nécessite JQuery pour la modale)
 ### 1.3.2 (Mars 2022)

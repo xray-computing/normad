@@ -1,10 +1,11 @@
 /*!
- * normad v1.3.2
+ * normad v1.4.0
  * Normalisation d'Adresse à partir des Open Data Gouvernementales
  * 
  * ISC License
  * by X-ray Computing
  */
+var Normad = { normalized: false, error = null };
 document.addEventListener("DOMContentLoaded", function () {
     if (typeof normaFields !== 'undefined') {
         // Contrôle la saisie de l'adresse
@@ -61,7 +62,8 @@ document.addEventListener("DOMContentLoaded", function () {
                                 indexes.push(row.properties.id);
                             }
                         }
-
+                        Normad.normalized = false;
+                        Normad.error = null;
                         if (addresses.length > 1) {
                             // Create Modal
                             var modale = document.getElementById('normadModal');
@@ -234,7 +236,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                     }
                                     addPostCode.value = addresses[checked[0].dataset.id].postcode;
                                     addLocality.value = addresses[checked[0].dataset.id].city;
-                                    
+                                    Normad.normalized = true;
                                     fireChange(addLocality);
                                 }
                                 if (isBootstrap) {
@@ -255,13 +257,17 @@ document.addEventListener("DOMContentLoaded", function () {
                             }
                             addPostCode.value = addresses[0].postcode;
                             addLocality.value = addresses[0].city;
-                            
+                            Normad.normalized = true;
                             fireChange(addLocality);
                         } else {
                             console.log('Normad: No Address Found');
+                            Normad.error = 'No address was found';
+                            fireChange(addLocality);
                         }
                     } else {
                         console.log('Normad: Request Failed');
+                        Normad.error = data.description;
+                        fireChange(addLocality);
                     }
                 };
                 xhr.onerror = function () {
