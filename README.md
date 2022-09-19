@@ -68,6 +68,8 @@ Vous pouvez dans un script externe capturer le fait que la mise à jour ait ét�
             // Address was normalized
         } else if (Normad.error !== null) {
             // Erreur rencontrée à la normalisation
+        } else if (Normad.cancel === true) {
+            // Refus de la normalisation
         }
     });
 </script>
@@ -83,6 +85,10 @@ Pour chaque bouton (cancel ou submit), on pourra définir l'ordre d'affichage et
 * Configuration de la modale, du titre, etc.
 * Feuille de style personnalisée
 * and so on...
+### 1.4.2 (Septebmre 2022)
+* Invalid shorthand property initializer
+### 1.4.1 (Juillet 2022)
+* Flag Normad.cancel indique si l'utilisateur a cliqué sur le bouton Annuler (adresse non normalisée, volontaire)
 ### 1.4.0 (Juin 2022)
 * Flag Normad.normalized indique si l'adresse a été normalisée ou non
 ### 1.3.3 (Avril 2022)

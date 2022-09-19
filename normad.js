@@ -5,7 +5,7 @@
  * ISC License
  * by X-ray Computing
  */
-var Normad = { normalized: false, error = null };
+var Normad = { normalized: false, error: null };
 document.addEventListener("DOMContentLoaded", function () {
     if (typeof normaFields !== 'undefined') {
         // Contrôle la saisie de l'adresse
@@ -64,6 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
                         Normad.normalized = false;
                         Normad.error = null;
+                        Normad.cancel = false;
                         if (addresses.length > 1) {
                             // Create Modal
                             var modale = document.getElementById('normadModal');
@@ -249,6 +250,12 @@ document.addEventListener("DOMContentLoaded", function () {
                                 } else {
                                     modale.style.display = "none";
                                 }
+                            });
+                            
+                            modale.querySelector('.btn-secondary').addEventListener('click', (event) => {
+                                Normad.normalized = false;
+                                Normad.cancel = true;
+                                fireChange(addLocality);
                             });
                         } else if (addresses.length == 1) {
                             // One answer

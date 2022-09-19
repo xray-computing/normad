@@ -1,6 +1,6 @@
 {
   "name": "normad",
-  "version": "1.4.0",
+  "version": "1.4.2",
   "description": "Normalisation d'adresse basée sur Open Data Gouvernementales",
   "main": "normad.js",
   "scripts": {
